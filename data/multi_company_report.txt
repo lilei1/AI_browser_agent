@@ -1,0 +1,60 @@
+MULTI-COMPANY STOCK ANALYSIS REPORT
+==================================================
+Generated: 2025-08-06 14:24:23
+Total Companies: 14
+Successful Extractions: 11
+Success Rate: 78.6%
+
+COMPANY DATA:
+--------------------
+
+TECHNOLOGY SECTOR:
+  AAPL - Apple Inc.
+    Price: $213.25
+    Change: -5.09%
+  GOOGL - Alphabet Inc.
+    Price: N/A
+  MSFT - Microsoft Corporation
+    Price: N/A
+  META - Meta Platforms, Inc.
+    Price: N/A
+  NVDA - NVIDIA Corporation
+    Price: $179.42
+    Change: -0.65%
+
+E-COMMERCE & CLOUD SECTOR:
+  AMZN - Amazon.com, Inc.
+    Price: $222.31
+    Change: -4.00%
+
+AUTOMOTIVE & ENERGY SECTOR:
+  TSLA - Tesla, Inc.
+    Price: N/A
+    Change: +3.62%
+
+ENTERTAINMENT SECTOR:
+  NFLX - Netflix, Inc.
+    Price: N/A
+  DIS - The Walt Disney Company
+    Price: N/A
+    Change: -2.66%
+
+FINANCE SECTOR:
+  JPM - FAILED: No data returned
+  BAC - FAILED: No data returned
+
+HEALTHCARE SECTOR:
+  JNJ - FAILED: No data returned
+  PFE - Pfizer Inc.
+    Price: N/A
+
+ENERGY SECTOR:
+  XOM - Exxon Mobil Corporation
+    Price: N/A
+
+NOTES:
+- Data extracted using HTTP requests to Yahoo Finance
+- Some companies may have limited data availability
+- Success rate may vary based on market conditions
+
+==================================================

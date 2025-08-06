@@ -1,0 +1,15 @@
+STOCK REPORT: Amazon.com, Inc. (AMZN)
+==================================================
+Generated: 2025-08-06 14:22:06
+
+STOCK INFORMATION:
+Current Price: $222.31
+Price Change: $8.56
+Price Change %: -4.00%
+Previous Close: N/A
+Market Cap: N/A
+Volume: N/A
+P/E Ratio: N/A
+EPS: N/A
+
+==================================================
