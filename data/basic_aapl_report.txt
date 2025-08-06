@@ -1,0 +1,14 @@
+BASIC STOCK REPORT: Apple Inc. (AAPL)
+==================================================
+Generated: 2025-08-06 13:47:18
+
+STOCK INFORMATION:
+Current Price: $213.25
+Price Change: $10.33
+Price Change %: -5.09%
+Previous Close: N/A
+Market Cap: N/A
+Volume: N/A
+
+Extraction Time: 0.95 seconds
+==================================================
