@@ -14,7 +14,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
 from src.yahoo_finance_agent import YahooFinanceAgent
 from src.yahoo_finance_agent.ui import FinanceDashboard, ReportGenerator
-from src.yahoo_finance_agent.data import DataProcessor
+# from src.yahoo_finance_agent.data import DataProcessor  # Disabled for Python 3.7
 from config import settings, create_directories
 
 # Setup logging
@@ -50,9 +50,9 @@ def extract(symbol: str, headless: bool, analysis: bool, save_report: bool, outp
     report_generator = ReportGenerator()
     
     try:
-        with dashboard.show_progress(f"Extracting data for {symbol}..."):
-            with YahooFinanceAgent(headless=headless, use_ai_analysis=analysis) as agent:
-                result = agent.extract_stock_data(symbol, include_analysis=analysis)
+        dashboard.console.print(f"⏳ Extracting data for {symbol}...")
+        with YahooFinanceAgent(headless=headless, use_ai_analysis=analysis) as agent:
+            result = agent.extract_stock_data(symbol, include_analysis=analysis)
         
         if result["success"]:
             stock_data = result["stock_data"]
@@ -126,9 +126,9 @@ def price(symbol: str, headless: bool):
     dashboard = FinanceDashboard()
     
     try:
-        with dashboard.show_progress(f"Getting price for {symbol}..."):
-            with YahooFinanceAgent(headless=headless, use_ai_analysis=False) as agent:
-                result = agent.get_real_time_price(symbol)
+        dashboard.console.print(f"⏳ Getting price for {symbol}...")
+        with YahooFinanceAgent(headless=headless, use_ai_analysis=False) as agent:
+            result = agent.get_real_time_price(symbol)
         
         if result["success"]:
             price_info = result
@@ -159,57 +159,18 @@ def price(symbol: str, headless: bool):
 @click.option('--period', '-p', default='1y', help='Data period (1d, 5d, 1mo, 3mo, 6mo, 1y, 2y, 5y, 10y, ytd, max)')
 @click.option('--interval', '-i', default='1d', help='Data interval (1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo)')
 def historical(symbol: str, period: str, interval: str):
-    """Get historical data and technical analysis"""
-    
+    """Get historical data and technical analysis (disabled for Python 3.7)"""
+
     dashboard = FinanceDashboard()
-    processor = DataProcessor()
-    
+
     try:
-        with dashboard.show_progress(f"Fetching historical data for {symbol}..."):
-            historical_data = processor.get_historical_data(symbol, period, interval)
-        
-        if historical_data:
-            # Calculate technical indicators
-            indicators = processor.calculate_technical_indicators(historical_data)
-            patterns = processor.analyze_price_patterns(historical_data)
-            
-            # Display results
-            from rich.table import Table
-            
-            # Technical indicators table
-            indicators_table = Table(title=f"{symbol} Technical Indicators")
-            indicators_table.add_column("Indicator", style="cyan")
-            indicators_table.add_column("Value", style="green")
-            
-            for key, value in indicators.items():
-                if value is not None:
-                    if isinstance(value, float):
-                        indicators_table.add_row(key.replace('_', ' ').title(), f"{value:.2f}")
-                    else:
-                        indicators_table.add_row(key.replace('_', ' ').title(), str(value))
-            
-            dashboard.console.print(indicators_table)
-            
-            # Pattern analysis
-            if patterns and not patterns.get('error'):
-                dashboard.console.print(f"\n[bold]Pattern Analysis:[/bold]")
-                
-                trend = patterns.get('trend', {})
-                if trend:
-                    dashboard.console.print(f"Trend: {trend.get('direction', 'unknown').title()} (Strength: {trend.get('strength', 0):.2f})")
-                
-                chart_patterns = patterns.get('chart_patterns', [])
-                if chart_patterns:
-                    dashboard.console.print(f"Chart Patterns: {', '.join(chart_patterns)}")
-                
-                candlestick_patterns = patterns.get('candlestick_patterns', [])
-                if candlestick_patterns:
-                    dashboard.console.print(f"Candlestick Patterns: {', '.join(candlestick_patterns)}")
-            
-            dashboard.display_success(f"Historical analysis completed for {symbol}")
-        
-        else:
-            dashboard.display_error(f"Failed to fetch historical data for {symbol}")
+        dashboard.display_error("Historical data analysis is not available in Python 3.7 compatibility mode.")
+        dashboard.console.print("\n[yellow]To use historical data features:[/yellow]")
+        dashboard.console.print("1. Upgrade to Python 3.8 or higher")
+        dashboard.console.print("2. Run: pip install -r requirements.txt")
+        dashboard.console.print("3. Use the full version with DataProcessor")
+        dashboard.console.print("\n[cyan]Alternative: Use basic_demo.py for current price data[/cyan]")
+
     
     except Exception as e:
         dashboard.display_error(f"Historical analysis failed: {str(e)}")

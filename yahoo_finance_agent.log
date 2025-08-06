@@ -1,0 +1,57 @@
+2025-08-06 13:56:15 | INFO | src.yahoo_finance_agent.ui.dashboard:__init__:30 | Finance dashboard initialized
+2025-08-06 13:56:15 | INFO | src.yahoo_finance_agent.ui.dashboard:__init__:247 | Report generator initialized
+2025-08-06 13:56:15 | ERROR | __main__:extract:85 | Unexpected error in extract command
+Traceback (most recent call last):
+
+  File "main.py", line 203, in <module>
+    cli()
+    └ <Group cli>
+
+  File "/Users/LiLei/Library/Python/3.7/lib/python/site-packages/click/core.py", line 1128, in __call__
+    return self.main(*args, **kwargs)
+           │    │     │       └ {}
+           │    │     └ ()
+           │    └ <function BaseCommand.main at 0x10e4b1b70>
+           └ <Group cli>
+  File "/Users/LiLei/Library/Python/3.7/lib/python/site-packages/click/core.py", line 1053, in main
+    rv = self.invoke(ctx)
+         │    │      └ <click.core.Context object at 0x113837f98>
+         │    └ <function MultiCommand.invoke at 0x10e4b5b70>
+         └ <Group cli>
+  File "/Users/LiLei/Library/Python/3.7/lib/python/site-packages/click/core.py", line 1659, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+           │               │       │       │      └ <click.core.Context object at 0x113846048>
+           │               │       │       └ <function Command.invoke at 0x10e4b5620>
+           │               │       └ <Command extract>
+           │               └ <click.core.Context object at 0x113846048>
+           └ <function MultiCommand.invoke.<locals>._process_result at 0x10ded3c80>
+  File "/Users/LiLei/Library/Python/3.7/lib/python/site-packages/click/core.py", line 1395, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           │   │      │    │           │   └ {'symbol': 'AAPL', 'headless': True, 'analysis': True, 'save_report': False, 'output_format': 'text'}
+           │   │      │    │           └ <click.core.Context object at 0x113846048>
+           │   │      │    └ <function extract at 0x113834510>
+           │   │      └ <Command extract>
+           │   └ <function Context.invoke at 0x10e4b1488>
+           └ <click.core.Context object at 0x113846048>
+  File "/Users/LiLei/Library/Python/3.7/lib/python/site-packages/click/core.py", line 754, in invoke
+    return __callback(*args, **kwargs)
+                       │       └ {'symbol': 'AAPL', 'headless': True, 'analysis': True, 'save_report': False, 'output_format': 'text'}
+                       └ ()
+
+> File "main.py", line 53, in extract
+    with dashboard.show_progress(f"Extracting data for {symbol}..."):
+         │         └ <function FinanceDashboard.show_progress at 0x113839d90>
+         └ <src.yahoo_finance_agent.ui.dashboard.FinanceDashboard object at 0x1138461d0>
+
+AttributeError: __enter__
+2025-08-06 13:56:47 | INFO | src.yahoo_finance_agent.ui.dashboard:__init__:30 | Finance dashboard initialized
+2025-08-06 13:56:47 | INFO | src.yahoo_finance_agent.ui.dashboard:__init__:247 | Report generator initialized
+2025-08-06 13:56:47 | INFO | src.yahoo_finance_agent.core.agent:__init__:39 | Yahoo Finance Agent initialized successfully
+2025-08-06 13:56:47 | INFO | src.yahoo_finance_agent.core.agent:extract_stock_data:61 | Starting data extraction for AAPL
+2025-08-06 13:56:47 | INFO | src.yahoo_finance_agent.scrapers.yahoo_scraper:scrape_stock_data:52 | Starting to scrape data for AAPL
+2025-08-06 13:56:48 | ERROR | src.yahoo_finance_agent.core.browser:setup_driver:64 | Failed to setup browser driver: There is no such driver by url https://chromedriver.storage.googleapis.com/LATEST_RELEASE_138.0.7204
+2025-08-06 13:56:48 | ERROR | src.yahoo_finance_agent.scrapers.yahoo_scraper:_scrape_with_browser:125 | Browser scraping failed: There is no such driver by url https://chromedriver.storage.googleapis.com/LATEST_RELEASE_138.0.7204
+2025-08-06 13:56:48 | ERROR | src.yahoo_finance_agent.scrapers.yahoo_scraper:scrape_stock_data:71 | Failed to scrape data for AAPL
+2025-08-06 13:56:48 | INFO | src.yahoo_finance_agent.core.agent:close:232 | Closing Yahoo Finance Agent
+2025-08-06 13:56:48 | INFO | src.yahoo_finance_agent.core.agent:close:236 | Session summary: {'session_start': datetime.datetime(2025, 8, 6, 13, 56, 47, 592495), 'session_duration_seconds': 0.535853, 'total_scraping_attempts': 1, 'successful_scrapes': 0, 'failed_scrapes': 1, 'success_rate': 0.0, 'total_analyses': 0, 'ai_analysis_enabled': False}
+2025-08-06 13:56:48 | INFO | src.yahoo_finance_agent.core.agent:close:241 | Yahoo Finance Agent closed successfully

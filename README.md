@@ -40,35 +40,42 @@ cp .env.example .env
 
 ## 🎯 Quick Start
 
-### Basic Stock Data Extraction
+### ✅ **Working Commands (Python 3.7+ Compatible)**
+
+#### Simple CLI (Recommended)
 ```bash
-# Extract comprehensive data for AAPL
-python main.py extract --symbol AAPL
-
-# Extract data without AI analysis
-python main.py extract --symbol AAPL --no-analysis
-
-# Save report to file
-python main.py extract --symbol AAPL --save-report
-```
-
-### Real-time Price Monitoring
-```bash
-# Monitor AAPL for 30 minutes, checking every 5 minutes
-python main.py monitor --symbol AAPL --duration 30 --interval 300
+# Extract comprehensive data for AAPL with report
+python3 simple_cli.py extract --symbol AAPL --save-report
 
 # Quick price check
-python main.py price --symbol AAPL
+python3 simple_cli.py price --symbol AAPL
+
+# Show CLI information
+python3 simple_cli.py info
 ```
 
-### Historical Data Analysis
+#### Basic Demo
 ```bash
-# Get 1-year historical data with technical analysis
-python main.py historical --symbol AAPL --period 1y
-
-# Get 6-month data with daily intervals
-python main.py historical --symbol AAPL --period 6mo --interval 1d
+# Interactive demo with rich interface
+python3 basic_demo.py
 ```
+
+### ⚠️ **Full CLI (Requires Python 3.8+ and Chrome)**
+```bash
+# Extract comprehensive data for AAPL
+python3 main.py extract --symbol AAPL
+
+# Extract data without AI analysis
+python3 main.py extract --symbol AAPL --no-analysis
+
+# Save report to file
+python3 main.py extract --symbol AAPL --save-report
+
+# Quick price check
+python3 main.py price --symbol AAPL
+```
+
+**Note**: The full CLI requires Chrome browser and Python 3.8+. For Python 3.7, use `simple_cli.py` instead.
 
 ## 🏗️ Architecture
 
