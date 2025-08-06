@@ -60,22 +60,23 @@ python3 simple_cli.py info
 python3 basic_demo.py
 ```
 
-### ⚠️ **Full CLI (Requires Python 3.8+ and Chrome)**
+### ✅ **Main CLI (Now Working with Python 3.7+)**
 ```bash
-# Extract comprehensive data for AAPL
-python3 main.py extract --symbol AAPL
-
-# Extract data without AI analysis
-python3 main.py extract --symbol AAPL --no-analysis
-
-# Save report to file
+# Extract comprehensive data for AAPL with report
 python3 main.py extract --symbol AAPL --save-report
+
+# Extract data for other symbols
+python3 main.py extract --symbol GOOGL
+python3 main.py extract --symbol MSFT
 
 # Quick price check
 python3 main.py price --symbol AAPL
+
+# JSON format output
+python3 main.py extract --symbol AAPL --save-report --output-format json
 ```
 
-**Note**: The full CLI requires Chrome browser and Python 3.8+. For Python 3.7, use `simple_cli.py` instead.
+**Note**: The main CLI now uses HTTP-based scraping (no browser required) and works with Python 3.7+.
 
 ## 🏗️ Architecture
 

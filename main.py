@@ -51,30 +51,99 @@ def extract(symbol: str, headless: bool, analysis: bool, save_report: bool, outp
     
     try:
         dashboard.console.print(f"⏳ Extracting data for {symbol}...")
-        with YahooFinanceAgent(headless=headless, use_ai_analysis=analysis) as agent:
-            result = agent.extract_stock_data(symbol, include_analysis=analysis)
-        
-        if result["success"]:
-            stock_data = result["stock_data"]
-            analysis_result = result.get("analysis")
-            
-            # Display results
-            dashboard.display_stock_summary(stock_data, analysis_result)
-            
+
+        # Use the working HTTP-based scraping method
+        from basic_demo import scrape_yahoo_finance_basic
+
+        data = scrape_yahoo_finance_basic(symbol.upper())
+
+        if data and "error" not in data:
+            # Display results in a table
+            from rich.table import Table
+
+            table = Table(title=f"{data['company_name']} ({data['symbol']}) - Stock Information")
+            table.add_column("Metric", style="cyan", width=20)
+            table.add_column("Value", style="green", width=20)
+
+            # Format currency helper
+            def format_currency(value):
+                return f"${value:,.2f}" if value is not None else "N/A"
+
+            def format_volume(volume):
+                if volume is None:
+                    return "N/A"
+                if volume >= 1_000_000_000:
+                    return f"{volume / 1_000_000_000:.2f}B"
+                elif volume >= 1_000_000:
+                    return f"{volume / 1_000_000:.2f}M"
+                elif volume >= 1_000:
+                    return f"{volume / 1_000:.2f}K"
+                else:
+                    return f"{volume:,}"
+
+            table.add_row("Current Price", format_currency(data['current_price']))
+
+            if data['price_change'] is not None:
+                change_color = "green" if data['price_change'] >= 0 else "red"
+                change_text = f"{format_currency(data['price_change'])}"
+                if data['price_change_percent'] is not None:
+                    change_text += f" ({data['price_change_percent']:+.2f}%)"
+                table.add_row("Price Change", f"[{change_color}]{change_text}[/{change_color}]")
+
+            table.add_row("Previous Close", format_currency(data['previous_close']))
+            table.add_row("Market Cap", data['market_cap'] or "N/A")
+            table.add_row("Volume", format_volume(data['volume']))
+
+            if data.get('pe_ratio'):
+                table.add_row("P/E Ratio", f"{data['pe_ratio']:.2f}")
+
+            if data.get('eps'):
+                table.add_row("EPS", format_currency(data['eps']))
+
+            dashboard.console.print(table)
+            dashboard.display_success(f"Successfully extracted data for {symbol}")
+
             # Save report if requested
             if save_report:
+                import os
+                os.makedirs("data", exist_ok=True)
+
+                from datetime import datetime
+
+                report_lines = [
+                    f"STOCK REPORT: {data['company_name']} ({data['symbol']})",
+                    "=" * 50,
+                    f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+                    "",
+                    "STOCK INFORMATION:",
+                    f"Current Price: {format_currency(data['current_price'])}",
+                    f"Price Change: {format_currency(data['price_change'])}",
+                    f"Price Change %: {data['price_change_percent']:+.2f}%" if data['price_change_percent'] else "Price Change %: N/A",
+                    f"Previous Close: {format_currency(data['previous_close'])}",
+                    f"Market Cap: {data['market_cap'] or 'N/A'}",
+                    f"Volume: {format_volume(data['volume'])}",
+                    f"P/E Ratio: {data['pe_ratio']:.2f}" if data.get('pe_ratio') else "P/E Ratio: N/A",
+                    f"EPS: {format_currency(data['eps'])}" if data.get('eps') else "EPS: N/A",
+                    "",
+                    "=" * 50
+                ]
+
                 if output_format == 'json':
-                    report_content = report_generator.generate_json_report(stock_data, analysis_result)
-                    filename = f"{symbol}_report.json"
+                    import json
+                    report_content = json.dumps(data, indent=2, default=str)
+                    filename = f"data/{symbol.lower()}_report.json"
                 else:
-                    report_content = report_generator.generate_stock_report(stock_data, analysis_result)
-                    filename = f"{symbol}_report.txt"
-                
-                filepath = report_generator.save_report_to_file(report_content, filename)
-                dashboard.display_success(f"Report saved to: {filepath}")
-        
+                    report_content = "\n".join(report_lines)
+                    filename = f"data/{symbol.lower()}_report.txt"
+
+                with open(filename, 'w') as f:
+                    f.write(report_content)
+
+                dashboard.display_success(f"Report saved to: {filename}")
+
         else:
-            dashboard.display_error(result["error"])
+            error_msg = data.get("error", "Failed to extract data") if data else "No data returned"
+            dashboard.display_error(error_msg)
             sys.exit(1)
     
     except KeyboardInterrupt:
@@ -127,27 +196,37 @@ def price(symbol: str, headless: bool):
     
     try:
         dashboard.console.print(f"⏳ Getting price for {symbol}...")
-        with YahooFinanceAgent(headless=headless, use_ai_analysis=False) as agent:
-            result = agent.get_real_time_price(symbol)
-        
-        if result["success"]:
-            price_info = result
-            
+
+        # Use the working HTTP-based scraping method
+        from basic_demo import scrape_yahoo_finance_basic
+
+        data = scrape_yahoo_finance_basic(symbol.upper())
+
+        if data and "error" not in data:
             # Create simple price display
             from rich.table import Table
-            table = Table(title=f"{symbol} Current Price")
+            table = Table(title=f"{symbol.upper()} Current Price")
             table.add_column("Metric", style="cyan")
             table.add_column("Value", style="green")
-            
-            table.add_row("Current Price", f"${price_info['current_price']:.2f}")
-            table.add_row("Change", f"${price_info['price_change']:.2f}")
-            table.add_row("Change %", f"{price_info['price_change_percent']:.2f}%")
-            table.add_row("Market Status", "Open" if price_info['market_hours'] else "Closed")
-            
+
+            def format_currency(value):
+                return f"${value:,.2f}" if value is not None else "N/A"
+
+            table.add_row("Current Price", format_currency(data['current_price']))
+
+            if data['price_change'] is not None:
+                change_color = "green" if data['price_change'] >= 0 else "red"
+                table.add_row("Change", f"[{change_color}]{format_currency(data['price_change'])}[/{change_color}]")
+
+            if data['price_change_percent'] is not None:
+                change_color = "green" if data['price_change_percent'] >= 0 else "red"
+                table.add_row("Change %", f"[{change_color}]{data['price_change_percent']:+.2f}%[/{change_color}]")
+
             dashboard.console.print(table)
-        
+
         else:
-            dashboard.display_error(result["error"])
+            error_msg = data.get("error", "Failed to get price") if data else "No data returned"
+            dashboard.display_error(error_msg)
             sys.exit(1)
     
     except Exception as e:

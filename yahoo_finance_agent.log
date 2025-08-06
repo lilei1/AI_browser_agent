@@ -55,3 +55,20 @@ AttributeError: __enter__
 2025-08-06 13:56:48 | INFO | src.yahoo_finance_agent.core.agent:close:232 | Closing Yahoo Finance Agent
 2025-08-06 13:56:48 | INFO | src.yahoo_finance_agent.core.agent:close:236 | Session summary: {'session_start': datetime.datetime(2025, 8, 6, 13, 56, 47, 592495), 'session_duration_seconds': 0.535853, 'total_scraping_attempts': 1, 'successful_scrapes': 0, 'failed_scrapes': 1, 'success_rate': 0.0, 'total_analyses': 0, 'ai_analysis_enabled': False}
 2025-08-06 13:56:48 | INFO | src.yahoo_finance_agent.core.agent:close:241 | Yahoo Finance Agent closed successfully
+2025-08-06 14:12:28 | INFO | src.yahoo_finance_agent.ui.dashboard:__init__:30 | Finance dashboard initialized
+2025-08-06 14:12:28 | INFO | src.yahoo_finance_agent.ui.dashboard:__init__:247 | Report generator initialized
+2025-08-06 14:12:28 | INFO | src.yahoo_finance_agent.ai.analyzer:__init__:36 | Financial analyzer initialized with model: gpt-4
+2025-08-06 14:12:28 | INFO | src.yahoo_finance_agent.core.agent:__init__:39 | Yahoo Finance Agent initialized successfully
+2025-08-06 14:12:28 | INFO | src.yahoo_finance_agent.core.agent:extract_stock_data:61 | Starting data extraction for AAPL
+2025-08-06 14:12:28 | INFO | src.yahoo_finance_agent.scrapers.yahoo_scraper:scrape_stock_data:52 | Starting to scrape data for AAPL
+2025-08-06 14:12:33 | ERROR | src.yahoo_finance_agent.core.browser:setup_driver:64 | Failed to setup browser driver: There is no such driver by url https://chromedriver.storage.googleapis.com/LATEST_RELEASE_138.0.7204
+2025-08-06 14:12:33 | ERROR | src.yahoo_finance_agent.scrapers.yahoo_scraper:_scrape_with_browser:125 | Browser scraping failed: There is no such driver by url https://chromedriver.storage.googleapis.com/LATEST_RELEASE_138.0.7204
+2025-08-06 14:12:33 | ERROR | src.yahoo_finance_agent.scrapers.yahoo_scraper:scrape_stock_data:71 | Failed to scrape data for AAPL
+2025-08-06 14:12:33 | INFO | src.yahoo_finance_agent.core.agent:close:232 | Closing Yahoo Finance Agent
+2025-08-06 14:12:33 | INFO | src.yahoo_finance_agent.core.agent:close:236 | Session summary: {'session_start': datetime.datetime(2025, 8, 6, 14, 12, 28, 635385), 'session_duration_seconds': 5.239764, 'total_scraping_attempts': 1, 'successful_scrapes': 0, 'failed_scrapes': 1, 'success_rate': 0.0, 'total_analyses': 0, 'ai_analysis_enabled': True}
+2025-08-06 14:12:33 | INFO | src.yahoo_finance_agent.core.agent:close:241 | Yahoo Finance Agent closed successfully
+2025-08-06 14:14:16 | INFO | src.yahoo_finance_agent.ui.dashboard:__init__:30 | Finance dashboard initialized
+2025-08-06 14:14:16 | INFO | src.yahoo_finance_agent.ui.dashboard:__init__:247 | Report generator initialized
+2025-08-06 14:14:26 | INFO | src.yahoo_finance_agent.ui.dashboard:__init__:30 | Finance dashboard initialized
+2025-08-06 14:14:35 | INFO | src.yahoo_finance_agent.ui.dashboard:__init__:30 | Finance dashboard initialized
+2025-08-06 14:14:35 | INFO | src.yahoo_finance_agent.ui.dashboard:__init__:247 | Report generator initialized
