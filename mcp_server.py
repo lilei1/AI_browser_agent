@@ -19,8 +19,18 @@ import traceback
 # Import the existing Yahoo Finance functionality
 from basic_demo import scrape_yahoo_finance_basic
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
+# Configure logging - redirect to file to avoid interfering with MCP protocol
+import tempfile
+log_file = tempfile.NamedTemporaryFile(mode='w', suffix='.log', delete=False, prefix='mcp_server_')
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler(log_file.name),
+        # Only log to stderr if not running as MCP server
+        logging.StreamHandler(sys.stderr) if '--debug' in sys.argv else logging.NullHandler()
+    ]
+)
 logger = logging.getLogger(__name__)
 
 @dataclass
@@ -701,37 +711,59 @@ async def main():
     server = YahooFinanceMCPServer()
     logger.info(f"Starting Yahoo Finance MCP Server v{server.version}")
     
-    # Read from stdin and write to stdout (MCP protocol)
-    while True:
-        try:
-            line = await asyncio.get_event_loop().run_in_executor(None, sys.stdin.readline)
-            if not line:
-                break
-            
-            request = json.loads(line.strip())
-            response = await server.handle_request(request)
-            
-            # Add request ID if present
-            if "id" in request:
-                response["id"] = request["id"]
-            
-            print(json.dumps(response))
-            sys.stdout.flush()
-            
-        except json.JSONDecodeError as e:
-            logger.error(f"Invalid JSON received: {e}")
-            error_response = {
-                "error": {
-                    "code": -32700,
-                    "message": "Parse error"
+    try:
+        # Read from stdin and write to stdout (MCP protocol)
+        while True:
+            try:
+                line = await asyncio.get_event_loop().run_in_executor(None, sys.stdin.readline)
+                if not line:
+                    logger.info("EOF received, shutting down")
+                    break
+                
+                line = line.strip()
+                if not line:
+                    continue
+                    
+                logger.debug(f"Received request: {line}")
+                request = json.loads(line)
+                response = await server.handle_request(request)
+                
+                # Add request ID if present
+                if "id" in request:
+                    response["id"] = request["id"]
+                
+                # Add jsonrpc version
+                response["jsonrpc"] = "2.0"
+                
+                response_json = json.dumps(response)
+                logger.debug(f"Sending response: {response_json}")
+                print(response_json)
+                sys.stdout.flush()
+                
+            except json.JSONDecodeError as e:
+                logger.error(f"Invalid JSON received: {e}")
+                error_response = {
+                    "jsonrpc": "2.0",
+                    "error": {
+                        "code": -32700,
+                        "message": "Parse error"
+                    }
                 }
-            }
-            print(json.dumps(error_response))
-            sys.stdout.flush()
-        except Exception as e:
-            logger.error(f"Unexpected error: {e}")
-            logger.error(traceback.format_exc())
-            break
+                print(json.dumps(error_response))
+                sys.stdout.flush()
+            except Exception as e:
+                logger.error(f"Unexpected error: {e}")
+                logger.error(traceback.format_exc())
+                # Don't break on individual request errors
+                continue
+                
+    except KeyboardInterrupt:
+        logger.info("Received interrupt signal, shutting down")
+    except Exception as e:
+        logger.error(f"Fatal error: {e}")
+        logger.error(traceback.format_exc())
+    finally:
+        logger.info("MCP Server shutdown complete")
 
 if __name__ == "__main__":
     asyncio.run(main())
