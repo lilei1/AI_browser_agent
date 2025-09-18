@@ -25,7 +25,7 @@ A comprehensive AI-powered browser agent for extracting and analyzing financial 
 
 1. **Clone the repository:**
 ```bash
-git clone https://github.com/lilei1/AI_browser_agent-.git
+git clone https://github.com/lilei1/AI_browser_agent.git
 cd AI_browser_agent-
 ```
 
