@@ -56,6 +56,23 @@ goose session start
 
 ## 🎯 Quick Start
 
+### ✅ **CONFIRMED WORKING** - Goose + Claude Integration
+
+```bash
+# 1. Clone and setup
+git clone https://github.com/lilei1/AI_browser_agent.git
+cd AI_browser_agent
+python setup_mcp.py
+
+# 2. Enable developer extension in Goose
+sed -i '' 's/enabled: false/enabled: true/' ~/.config/goose/config.yaml
+
+# 3. Start Goose and ask:
+# "Use the developer shell to run: cd /Users/lilei/Downloads/AI_browser_agent && python goose_wrapper.py price GOOGL"
+```
+
+**Result:** `GOOGL: $251.61 (-4.49%)` ✅
+
 ### Option 1: Automated Setup (Recommended)
 ```bash
 # Clone and setup everything automatically
