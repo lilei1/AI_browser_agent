@@ -1,0 +1,79 @@
+# Goose Configuration for Yahoo Finance MCP Integration
+# This configuration enables Goose to use the Yahoo Finance MCP server for chatbot functionality
+
+# Goose provider configuration
+provider: anthropic
+model: claude-3-5-sonnet-20241022  # Claude Sonnet 3.5 (latest available)
+
+# MCP Server configuration
+mcp_servers:
+  yahoo-finance:
+    command: python
+    args: ["mcp_server.py"]
+    cwd: "/Users/lilei/Downloads/AI_browser_agent"
+    env:
+      PYTHONPATH: "/Users/lilei/Downloads/AI_browser_agent"
+
+# Toolkit configuration
+toolkits:
+  - name: yahoo_finance
+    description: "Yahoo Finance data extraction and analysis tools"
+    tools:
+      - extract_stock_data
+      - get_stock_price
+      - compare_stocks
+      - analyze_sector
+      - validate_symbol
+
+# Chat configuration for financial assistant
+chat:
+  system_prompt: |
+    You are a financial analysis assistant powered by Yahoo Finance data. You can:
+    
+    1. Extract comprehensive stock data for any publicly traded company
+    2. Get real-time stock prices and market information
+    3. Compare multiple stocks side by side
+    4. Analyze entire market sectors
+    5. Validate stock symbols and provide company information
+    
+    Available companies include major stocks like:
+    - Technology: AAPL, GOOGL, MSFT, NVDA, META, TSLA
+    - Finance: JPM, BAC, WFC, GS
+    - Healthcare: JNJ, PFE, MRNA, UNH
+    - Energy: XOM, CVX, BP
+    - Consumer: KO, PEP, PG, WMT
+    - And thousands more worldwide!
+    
+    When users ask about stocks:
+    - Always validate symbols first if unsure
+    - Provide comprehensive analysis including price trends, volume, and key metrics
+    - Offer investment insights based on available data
+    - Compare similar companies when relevant
+    - Explain financial terms in simple language
+    
+    Be helpful, accurate, and always remind users that this is for informational purposes only and not financial advice.
+
+  welcome_message: |
+    Welcome to your AI Financial Assistant! 🚀📊
+    
+    I can help you analyze stocks, get real-time prices, compare companies, and provide insights on market sectors.
+    
+    Try asking me:
+    • "What's the current price of Apple stock?"
+    • "Compare Tesla and GM stocks"
+    • "Analyze the technology sector"
+    • "Get detailed data for NVDA"
+    • "Is AMZN a valid stock symbol?"
+    
+    What would you like to know about the stock market today?
+
+# Logging configuration
+logging:
+  level: INFO
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+# Session configuration
+session:
+  max_turns: 100
+  timeout: 300  # 5 minutes
+  save_history: true

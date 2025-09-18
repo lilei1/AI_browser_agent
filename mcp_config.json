@@ -1,0 +1,38 @@
+{
+  "mcpServers": {
+    "yahoo-finance": {
+      "command": "python",
+      "args": ["mcp_server.py"],
+      "cwd": "/Users/lilei/Downloads/AI_browser_agent",
+      "env": {
+        "PYTHONPATH": "/Users/lilei/Downloads/AI_browser_agent"
+      }
+    }
+  },
+  "server": {
+    "name": "yahoo-finance-agent",
+    "version": "1.0.0",
+    "description": "Yahoo Finance data extraction and analysis MCP server",
+    "capabilities": {
+      "tools": [
+        "extract_stock_data",
+        "get_stock_price", 
+        "compare_stocks",
+        "analyze_sector",
+        "validate_symbol"
+      ],
+      "resources": [
+        "market-status",
+        "supported-sectors"
+      ],
+      "prompts": [
+        "analyze_stock_performance",
+        "investment_recommendation"
+      ]
+    }
+  },
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  }
+}
